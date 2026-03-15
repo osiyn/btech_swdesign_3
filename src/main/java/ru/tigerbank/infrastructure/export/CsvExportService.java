@@ -11,34 +11,25 @@ import ru.tigerbank.domain.model.Operation;
 import ru.tigerbank.application.interfaces.services.IExportService;
 
 public class CsvExportService implements IExportService {
-    private final IOperationRepository operationRepository;
-
-    public CsvExportService(IOperationRepository operationRepository) {
-        this.operationRepository = operationRepository;
-    }
 
     @Override
     public String export(List<BankAccount> accounts) {
         StringWriter stringWriter = new StringWriter();
+
         try (CSVWriter writer = new CSVWriter(stringWriter)) {
-            String[] header = {"Дата", "Счет", "Тип", "Категория", "Сумма", "Валюта", "Описание"};
+            // Заголовок
+            String[] header = {"ID счёта", "Название", "Баланс", "Валюта"};
             writer.writeNext(header);
 
-            // Данные по каждому счету
+            // Данные
             for (BankAccount account : accounts) {
-                List<Operation> operations = operationRepository.findByAccount(account.getId());
-                for (Operation op : operations) {
-                    String[] line = {
-                            op.getDate().toLocalDate().toString(),
-                            account.getName(),
-                            op.getType().getDisplayName(),
-                            op.getCategoryId().toString(),
-                            op.getAmount().getAmount().toString(),
-                            op.getAmount().getCurrencyCode(),
-                            op.getDescription() != null ? op.getDescription() : ""
-                    };
-                    writer.writeNext(line);
-                }
+                String[] line = {
+                        account.getId().toString(),
+                        account.getName(),
+                        account.getBalance().getAmount().toString(),
+                        account.getBalance().getCurrencyCode()
+                };
+                writer.writeNext(line);
             }
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при экспорте в CSV", e);

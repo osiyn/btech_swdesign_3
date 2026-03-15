@@ -2,7 +2,9 @@ package ru.tigerbank;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import ru.tigerbank.infrastructure.di.DependencyFactory;
+import ru.tigerbank.application.command.CommandInvoker;
+import ru.tigerbank.application.command.CreateAccountCommand;
+import ru.tigerbank.application.command.ExportDataCommand;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import ru.tigerbank.application.interfaces.services.*;
+import ru.tigerbank.domain.enums.ExportFormat;
 import ru.tigerbank.domain.enums.OperationType;
 import ru.tigerbank.domain.model.BankAccount;
 import ru.tigerbank.domain.model.Money;
@@ -20,27 +23,21 @@ import ru.tigerbank.domain.model.Category;
 
 @SpringBootApplication
 public class ConsoleApplication {
-    private final DependencyFactory factory;
     private final IBankAccountService accountService;
     private final ICategoryService categoryService;
     private final IOperationService operationService;
     private final IAnalyticsService analyticsService;
-    private final IExportService jsonExportService;
-    private final IExportService csvExportService;
-    private final IExportService yamlExportService;
+    private final CommandInvoker commandInvoker;
 
     public ConsoleApplication(IBankAccountService accountService,
                               ICategoryService categoryService,
                               IOperationService operationService,
                               IAnalyticsService analyticsService) {
-        this.factory = new DependencyFactory();
         this.accountService = accountService;
         this.categoryService = categoryService;
         this.operationService = operationService;
         this.analyticsService = analyticsService;
-        this.jsonExportService = factory.getJsonExportService();
-        this.csvExportService = factory.getCsvExportService();
-        this.yamlExportService = factory.getYamlExportService();
+        this.commandInvoker = new CommandInvoker();
     }
 
     public void run() {
@@ -51,12 +48,12 @@ public class ConsoleApplication {
         try {
             // 1. Создание счетов
             System.out.println("\nСоздание счетов...");
-            BankAccount mainAccount = accountService.createAccount("Основной счет",
-                    new Money(new BigDecimal("50000.00"), "RUB"));
+            BankAccount mainAccount = commandInvoker.execute(new CreateAccountCommand(accountService, "Основной счет",
+                    new Money(new BigDecimal("50000.00"), "RUB")));
             System.out.println("Done " + mainAccount);
 
-            BankAccount savingsAccount = accountService.createAccount("Сберегательный счет",
-                    new Money(new BigDecimal("120000.00"), "RUB"));
+            BankAccount savingsAccount = commandInvoker.execute(new CreateAccountCommand(accountService, "Сберегательный счет",
+                    new Money(new BigDecimal("120000.00"), "RUB")));
             System.out.println("Done " + savingsAccount);
 
             // 2. Создание категорий
@@ -127,21 +124,27 @@ public class ConsoleApplication {
             System.out.printf("Чистый доход за период: %.2f ₽%n", netIncome);
 
             // 5. Экспорт данных
+            var csvExportCommand = new ExportDataCommand(accountService, ExportFormat.CSV);
+            var jsonExportCommand = new ExportDataCommand(accountService, ExportFormat.JSON);
+            var yamlExportCommand = new ExportDataCommand(accountService, ExportFormat.YAML);
+
             System.out.println("\nЭкспорт данных...");
             List<BankAccount> allAccounts = accountService.getAllAccounts();
 
             // JSON экспорт
-            String jsonData = jsonExportService.export(allAccounts);
+            String jsonData = commandInvoker.execute(jsonExportCommand);
             writeToFile("export-finance.json", jsonData);
             System.out.println("Данные экспортированы в export-finance.json");
 
             // CSV экспорт
-            String csvData = csvExportService.export(allAccounts);
+//            String csvData = csvExportService.export(allAccounts);
+            String csvData = commandInvoker.execute(csvExportCommand);
             writeToFile("export-finance.csv", csvData);
             System.out.println("Данные экспортированы в export-finance.csv");
 
             // YAML экспорт
-            String yamlData = yamlExportService.export(allAccounts);
+//            String yamlData = yamlExportService.export(allAccounts);
+            String yamlData = commandInvoker.execute(yamlExportCommand);
             writeToFile("export-finance.yaml", yamlData);
             System.out.println("Данные экспортированы в export-finance.yaml");
 
@@ -157,7 +160,7 @@ public class ConsoleApplication {
             System.out.printf("   Баланс ПОСЛЕ пересчета: %s%n", accountAfterRecalc.getBalance());
 
         } catch (Exception e) {
-            System.err.println("\n!!!Ошибка выполнения: " + e.getMessage());
+            System.err.println("\nОшибка выполнения: " + e.getMessage());
             e.printStackTrace();
         }
 
