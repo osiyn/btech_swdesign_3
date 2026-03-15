@@ -9,12 +9,14 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
 import ru.tigerbank.application.interfaces.repository.ICategoryRepository;
 import ru.tigerbank.application.interfaces.repository.IOperationRepository;
 import ru.tigerbank.application.interfaces.services.IAnalyticsService;
 import ru.tigerbank.domain.enums.OperationType;
 import ru.tigerbank.domain.model.*;
 
+@Service
 public class AnalyticsService implements IAnalyticsService {
     private final IOperationRepository operationRepository;
     private final ICategoryRepository categoryRepository;

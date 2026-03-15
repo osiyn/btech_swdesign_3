@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
 import ru.tigerbank.application.interfaces.repository.IBankAccountRepository;
 import ru.tigerbank.application.interfaces.repository.IOperationRepository;
 import ru.tigerbank.application.interfaces.services.IBankAccountService;
@@ -11,6 +12,7 @@ import ru.tigerbank.domain.model.BankAccount;
 import ru.tigerbank.domain.model.Money;
 import ru.tigerbank.domain.model.Operation;
 
+@Service
 public class BankAccountService implements IBankAccountService {
     private final IBankAccountRepository accountRepository;
     private final IOperationRepository operationRepository;

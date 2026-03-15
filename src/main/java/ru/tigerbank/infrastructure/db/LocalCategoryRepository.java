@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
 import ru.tigerbank.application.interfaces.repository.ICategoryRepository;
 import ru.tigerbank.domain.enums.OperationType;
 import ru.tigerbank.domain.model.Category;
 
+@Repository
 public class LocalCategoryRepository implements ICategoryRepository {
     private final Map<UUID, Category> storage = new HashMap<>();
 

@@ -1,5 +1,7 @@
-package ru.tigerbank.view;
+package ru.tigerbank;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import ru.tigerbank.infrastructure.di.DependencyFactory;
 
 import java.io.FileWriter;
@@ -16,6 +18,7 @@ import ru.tigerbank.domain.model.BankAccount;
 import ru.tigerbank.domain.model.Money;
 import ru.tigerbank.domain.model.Category;
 
+@SpringBootApplication
 public class ConsoleApplication {
     private final DependencyFactory factory;
     private final IBankAccountService accountService;
@@ -26,12 +29,15 @@ public class ConsoleApplication {
     private final IExportService csvExportService;
     private final IExportService yamlExportService;
 
-    public ConsoleApplication() {
+    public ConsoleApplication(IBankAccountService accountService,
+                              ICategoryService categoryService,
+                              IOperationService operationService,
+                              IAnalyticsService analyticsService) {
         this.factory = new DependencyFactory();
-        this.accountService = factory.getBankAccountService();
-        this.categoryService = factory.getCategoryService();
-        this.operationService = factory.getOperationService();
-        this.analyticsService = factory.getAnalyticsService();
+        this.accountService = accountService;
+        this.categoryService = categoryService;
+        this.operationService = operationService;
+        this.analyticsService = analyticsService;
         this.jsonExportService = factory.getJsonExportService();
         this.csvExportService = factory.getCsvExportService();
         this.yamlExportService = factory.getYamlExportService();
@@ -169,7 +175,10 @@ public class ConsoleApplication {
     }
 
     public static void main(String[] args) {
-        ConsoleApplication app = new ConsoleApplication();
+//        ConsoleApplication app = new ConsoleApplication();
+//        app.run();
+        var context = SpringApplication.run(ConsoleApplication.class, args);
+        var app = context.getBean(ConsoleApplication.class);
         app.run();
     }
 }

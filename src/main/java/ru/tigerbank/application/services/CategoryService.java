@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
 import ru.tigerbank.application.interfaces.repository.ICategoryRepository;
 import ru.tigerbank.application.interfaces.services.ICategoryService;
 import ru.tigerbank.domain.enums.OperationType;
 import ru.tigerbank.domain.model.Category;
 
+@Service
 public class CategoryService implements ICategoryService {
     private final ICategoryRepository categoryRepository;
 

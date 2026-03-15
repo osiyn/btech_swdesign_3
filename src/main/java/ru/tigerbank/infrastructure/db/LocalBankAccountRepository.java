@@ -7,9 +7,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.stereotype.Repository;
 import ru.tigerbank.application.interfaces.repository.IBankAccountRepository;
 import ru.tigerbank.domain.model.BankAccount;
 
+@Repository
 public class LocalBankAccountRepository implements IBankAccountRepository {
     private final Map<UUID, BankAccount> storage = new HashMap<>();
 

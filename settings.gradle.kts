@@ -1,1 +1,1 @@
-rootProject.name = "btech_swdesign_3"
+rootProject.name = "tigerbank"

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
 import ru.tigerbank.application.interfaces.repository.IBankAccountRepository;
 import ru.tigerbank.application.interfaces.repository.ICategoryRepository;
 import ru.tigerbank.application.interfaces.repository.IOperationRepository;
@@ -13,6 +14,7 @@ import ru.tigerbank.domain.enums.OperationType;
 import ru.tigerbank.domain.exceptions.DomainException;
 import ru.tigerbank.domain.model.*;
 
+@Service
 public class OperationService implements IOperationService {
     private final IOperationRepository operationRepository;
     private final IBankAccountRepository bankAccountRepository;

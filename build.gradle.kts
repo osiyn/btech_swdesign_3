@@ -1,13 +1,15 @@
 plugins {
     id("java")
     application
+    id("org.springframework.boot") version "3.4.2"
+    id("io.spring.dependency-management") version "1.1.7"
 }
 
 group = "ru.tigerbank"
 version = "1.0-SNAPSHOT"
 
 application {
-    mainClass = "ru.tigerbank.view.ConsoleApplication"
+    mainClass = "ru.tigerbank.ConsoleApplication"
 }
 
 repositories {
@@ -15,6 +17,9 @@ repositories {
 }
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+
     // JSON - Jackson
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2")

@@ -9,10 +9,12 @@ import java.util.UUID;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Repository;
 import ru.tigerbank.application.interfaces.repository.IOperationRepository;
 import ru.tigerbank.domain.enums.OperationType;
 import ru.tigerbank.domain.model.Operation;
 
+@Repository
 public class LocalOperationRepository implements IOperationRepository {
     private final Map<UUID, Operation> storage = new HashMap<>();
 
