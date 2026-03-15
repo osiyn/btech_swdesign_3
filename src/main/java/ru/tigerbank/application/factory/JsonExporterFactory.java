@@ -1,4 +1,4 @@
-package ru.tigerbank.application.interfaces.factory;
+package ru.tigerbank.application.factory;
 
 import ru.tigerbank.application.interfaces.services.IExportService;
 import ru.tigerbank.infrastructure.export.JsonExportService;

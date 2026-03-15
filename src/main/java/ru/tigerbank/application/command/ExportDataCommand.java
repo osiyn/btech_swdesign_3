@@ -3,7 +3,7 @@ package ru.tigerbank.application.command;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import ru.tigerbank.application.interfaces.command.ICommand;
-import ru.tigerbank.application.interfaces.factory.ExporterFactory;
+import ru.tigerbank.application.factory.ExporterFactory;
 import ru.tigerbank.application.interfaces.services.IBankAccountService;
 import ru.tigerbank.application.interfaces.services.IExportService;
 import ru.tigerbank.domain.enums.ExportFormat;
