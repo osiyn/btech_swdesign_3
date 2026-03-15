@@ -124,27 +124,23 @@ public class ConsoleApplication {
             System.out.printf("Чистый доход за период: %.2f ₽%n", netIncome);
 
             // 5. Экспорт данных
-            var csvExportCommand = new ExportDataCommand(accountService, ExportFormat.CSV);
-            var jsonExportCommand = new ExportDataCommand(accountService, ExportFormat.JSON);
-            var yamlExportCommand = new ExportDataCommand(accountService, ExportFormat.YAML);
-
             System.out.println("\nЭкспорт данных...");
             List<BankAccount> allAccounts = accountService.getAllAccounts();
 
             // JSON экспорт
-            String jsonData = commandInvoker.execute(jsonExportCommand);
+            String jsonData = commandInvoker.execute(new ExportDataCommand(accountService, ExportFormat.JSON));
             writeToFile("export-finance.json", jsonData);
             System.out.println("Данные экспортированы в export-finance.json");
 
             // CSV экспорт
 //            String csvData = csvExportService.export(allAccounts);
-            String csvData = commandInvoker.execute(csvExportCommand);
+            String csvData = commandInvoker.execute(new ExportDataCommand(accountService, ExportFormat.CSV));
             writeToFile("export-finance.csv", csvData);
             System.out.println("Данные экспортированы в export-finance.csv");
 
             // YAML экспорт
 //            String yamlData = yamlExportService.export(allAccounts);
-            String yamlData = commandInvoker.execute(yamlExportCommand);
+            String yamlData = commandInvoker.execute(new ExportDataCommand(accountService, ExportFormat.YAML));
             writeToFile("export-finance.yaml", yamlData);
             System.out.println("Данные экспортированы в export-finance.yaml");
 
