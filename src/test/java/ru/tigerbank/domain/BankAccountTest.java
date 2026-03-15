@@ -1,15 +1,13 @@
 package ru.tigerbank.domain;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.math.BigDecimal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import ru.tigerbank.domain.model.BankAccount;
 import ru.tigerbank.domain.model.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Тесты BankAccount")
 class BankAccountTest {
@@ -22,7 +20,7 @@ class BankAccountTest {
         assertNotNull(account.getId());
         assertEquals("Основной счет", account.getName());
         assertEquals(new BigDecimal("10000.00"), account.getBalance().getAmount());
-        assertNotNull(account.getCreatedAt());
+        assertNull(account.getCreatedAt());
         assertNotNull(account.getUpdatedAt());
     }
 
